@@ -56,6 +56,6 @@ if __name__ == "__main__":
     vi_backups, pi_backups = compute_backups(P, vi_iterations, pi_iterations)
 
     for i in range(len(gammas)):
-        print(f"Results for γ = {gammas[i]}:\nMethod\tIterations\tDuration\tBackups\nValueItr\t{vi_iterations[i]}\t{vi_durations[i]}\t\t{vi_backups[i]}\nPolicyItr\t{pi_iterations[i]}\t{pi_durations[i]}\t\t{pi_backups[i]}")
+        print(f"Results for γ = {gammas[i]}:\nMethod\tIterations\tDuration(ms)\tBackups\nValueItr\t{vi_iterations[i]}\t{vi_durations[i]}\t\t{vi_backups[i]}\nPolicyItr\t{pi_iterations[i]}\t{pi_durations[i]}\t\t{pi_backups[i]}")
 
     plot(gammas, vi_iterations, pi_iterations)

@@ -137,8 +137,46 @@ class PrioritizedSweepingValueIterationAgent(ValueIterationAgent):
           and then act according to the resulting policy.
         """
         self.theta = theta
+        self.predecessors = {}
         ValueIterationAgent.__init__(self, mdp, discount, iterations)
 
-    def runValueIteration(self):
-        "*** YOUR CODE HERE ***"
+    def computePredecessors(self):
+        # Compute state predecessors
+        self.predecessors = {}
+        for state in self.mdp.getStates():
+            self.predecessors[state] = set()
 
+        for state in self.mdp.getStates():
+            for action in self.mdp.getPossibleActions(state):
+                for s_prime, _ in self.mdp.getTransitionStatesAndProbs(state, action):
+                    self.predecessors[s_prime].add(state)
+
+    def computeValue(self, state):
+        return max([self.computeQValueFromValues(state, action) 
+                    for action in self.mdp.getPossibleActions(state)])
+
+    def computeErrorMagnitude(self, state):
+        return abs(self.values[state] - self.computeValue(state))
+
+    def runValueIteration(self):
+        self.computePredecessors()
+        queue = util.PriorityQueue()
+
+        for state in self.mdp.getStates():
+            if self.mdp.isTerminal(state):
+                continue
+            diff = self.computeErrorMagnitude(state)
+            queue.update(state, -diff)
+
+        for _ in range(self.iterations):
+            if queue.isEmpty():
+                return
+
+            state = queue.pop()
+            if not self.mdp.isTerminal(state):
+                self.values[state] = self.computeValue(state)
+
+            for predecessor in self.predecessors[state]:
+                diff = self.computeErrorMagnitude(predecessor)
+                if diff > self.theta:
+                    queue.update(predecessor, -diff)

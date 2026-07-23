@@ -63,8 +63,8 @@ def question7():
     answerEpsilon = None
     answerLearningRate = None
     #return answerEpsilon, answerLearningRate
-    return 'NOT POSSIBLE'
     # If not possible, return 'NOT POSSIBLE'
+    return 'NOT POSSIBLE' # 50 iterations is not enough time to reliably reach the far end of the bridge
 
 if __name__ == '__main__':
     print('Answers to analysis questions:')
